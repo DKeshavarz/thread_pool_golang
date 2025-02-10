@@ -1,5 +1,23 @@
-learn generics in golang
-
+generics in golang
 https://medium.com/@joao_vaz/generics-in-go-a-basic-primer-f4642183e830
+https://gobyexample.com/generics
+
+mutex in golang
+https://kamnagarg-10157.medium.com/understanding-mutex-in-go-5f41199085b9
+https://gobyexample.com/mutexes
 
 
+
+git 
+https://www.theserverside.com/video/Follow-these-git-commit-message-guidelines
+https://www.gitkraken.com/learn/git/best-practices/git-commit-message
+
+Worker Pool
+https://gobyexample.com/worker-pools
+
+file handeling
+https://cihanozhan.medium.com/file-operations-in-golang-292825c9fb3d
+
+
+slice in golang ?
+prompt engineering
