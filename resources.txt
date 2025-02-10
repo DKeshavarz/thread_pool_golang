@@ -1,0 +1,5 @@
+learn generics in golang
+
+https://medium.com/@joao_vaz/generics-in-go-a-basic-primer-f4642183e830
+
+
