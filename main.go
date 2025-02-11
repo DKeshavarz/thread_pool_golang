@@ -1,7 +1,14 @@
 package main
 
-import "thread_pool/pool"
+import (
+	"fmt"
+
+	"thread_pool/navidPool"
+	"thread_pool/workerPool"
+)
 
 func main() {
-    pool.RunManger(5,"file1.txt")
+    navidPool.RunManger(20,"file1.txt")
+    fmt.Println("**********************************************************")
+    workerPool.RunManger(20,"file1.txt")
 }
