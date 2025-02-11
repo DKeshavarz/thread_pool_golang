@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"sync"
 	"thread_pool/queue"
+	"time"
 )
 
 func RunManger(workerCnt int, fileName string){
@@ -48,11 +49,8 @@ func fileReader(queue *queue.Queue[int], fileName string,done chan struct{}){
 	close(done)
 }
 
-func fibo(n int)int{
-	if n <= 1 {
-		return n
-	}
-	return fibo(n-1)+fibo(n-2)
+func heavyCalculation(n int){
+	time.Sleep(time.Second * (time.Duration(n)))
 }
 
 func worker(queue *queue.Queue[int], done <-chan struct{}, id int,wg *sync.WaitGroup){
@@ -61,9 +59,9 @@ func worker(queue *queue.Queue[int], done <-chan struct{}, id int,wg *sync.WaitG
 	for {
 		for !queue.IsEmpty(){
 			val, _ := queue.Pop()
-			log.Println("id =", id, "  find val = ", val, "start")
-			new := fibo(val)
-			log.Println("id =", id, "  find val = ", val, "end ", new)
+			log.Printf("  _  ID = %-6d   Start with input -> %-6d \n", id , val)
+			heavyCalculation(val)
+			log.Printf("  _  ID = %-6d   End   with input -> %-6d \n", id , val)
 		}
 
 		select{
