@@ -14,10 +14,15 @@ https://www.gitkraken.com/learn/git/best-practices/git-commit-message
 
 Worker Pool
 https://gobyexample.com/worker-pools
+https://rksurwase.medium.com/efficient-concurrency-in-go-a-deep-dive-into-the-worker-pool-pattern-for-batch-processing-73cac5a5bdca
 
 file handeling
 https://cihanozhan.medium.com/file-operations-in-golang-292825c9fb3d
 
 
 slice in golang ?
-prompt engineering
+prompt engineering ?
+telegram git bot ?
+mark down ???
+
+file:///home/danny/Downloads/Telegram%20Desktop/proj.pdf
