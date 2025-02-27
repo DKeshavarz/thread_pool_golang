@@ -44,7 +44,7 @@ func (q *Queue[T])Pop()(T,error){
 func (q *Queue[T])Top()(T,error){	
 	if(q.IsEmpty()){
 		var ret T
-		return ret,errors.New("Empty Queue")
+		return ret, errors.New("empty queue")
 	}
 	defer q.mutex.Unlock()
 	q.mutex.Lock()
