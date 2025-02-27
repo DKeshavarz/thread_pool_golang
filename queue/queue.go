@@ -2,18 +2,22 @@ package queue
 
 import (
 	"errors"
-	"sync"
+	"thread_pool/mutex"
 )
 
 type Queue[T any] struct {
 	item []T
-	mutex sync.Mutex
+	mutex mutex.Mutex
 }
 
 func New[T any]()(*Queue[T]){
 	obj := &Queue[T]{
 		item: make([]T,0),
 	}
+
+	obj.mutex = mutex.NewAtomicMutex()
+	// obj.mutex = mutex.NewChanMutex()
+
 	return obj
 }
 
