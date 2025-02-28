@@ -11,15 +11,15 @@ import (
 	"time"
 )
 
-func RunManger(workerCnt int, fileName string){
-	queue := queue.New[int](100)
+func RunManger(workerCnt int, fileName string, queueSize int){
+	queue := queue.New[int](queueSize)
 	done := make(chan struct{})
-	go fileReader(queue, fileName,done)
+	go fileReader(queue, fileName, done)
 	
 	var wg sync.WaitGroup
 	for i := 1 ; i <= workerCnt ; i++ {
 		wg.Add(1)
-		go worker(queue,done,i,&wg)
+		go worker(queue, done, i, &wg)
 	}
 
 	wg.Wait()
@@ -28,12 +28,12 @@ func RunManger(workerCnt int, fileName string){
 
 func fileReader(queue *queue.Queue[int], fileName string,done chan struct{}){
 	data,err := os.Open(fileName)
+	defer data.Close()
+
 	if err != nil{
 		fmt.Println(err)
 		return
 	}
-	defer data.Close()
-
 
 	scanner := bufio.NewScanner(data)
 	for scanner.Scan() {

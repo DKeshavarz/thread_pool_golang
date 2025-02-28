@@ -24,7 +24,7 @@ func init() {
 }
 
 func main() {
-	navidPool.RunManger(numberWorker, "file1.txt")
+	navidPool.RunManger(numberWorker, "file1.txt", maxQueueSize)
 	fmt.Println("**********************************************************")
 	workerPool.RunManger(numberWorker, "file1.txt")
 }
