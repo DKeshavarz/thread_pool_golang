@@ -15,8 +15,8 @@ func New[T any]() *Queue[T] {
 		item: make([]T, 0),
 	}
 
-	// obj.mtx = mutex.NewAtomicMutex()
-	obj.mtx = mutex.NewChanMutex()
+	obj.mtx = mutex.NewAtomicMutex()
+	// obj.mtx = mutex.NewChanMutex()
 
 	return obj
 }
@@ -33,7 +33,7 @@ func (q *Queue[T]) Pop() (T, error) {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
 
-	if len(q.item) == 0 {
+	if len(q.item) <= 0 {
 		return ret, errors.New("empty queue")
 	}
 
@@ -43,15 +43,16 @@ func (q *Queue[T]) Pop() (T, error) {
 }
 
 func (q *Queue[T]) Top() (T, error) {
-	if q.IsEmpty() {
+	q.mtx.Lock()
+	defer q.mtx.Unlock()
+	
+	if len(q.item) <= 0 {
 		var ret T
 		return ret, errors.New("empty queue")
 	}
 
-	q.mtx.Lock()
-	defer q.mtx.Unlock()
-
-	return q.item[0], nil
+	ret := q.item[0]
+	return ret, nil
 }
 
 func (q *Queue[T]) Push(element T) {
