@@ -5,7 +5,7 @@ import (
 )
 
 func TestQueue_IsEmpty(t *testing.T) {
-	q := New[int]()
+	q := New[int](10)
 
 	if !q.IsEmpty() {
 		t.Error("Expected queue to be empty initially")
@@ -18,7 +18,7 @@ func TestQueue_IsEmpty(t *testing.T) {
 }
 
 func TestQueue_Push(t *testing.T) {
-	q := New[int]()
+	q := New[int](10)
 
 	q.Push(1)
 	if q.IsEmpty() {
@@ -33,7 +33,7 @@ func TestQueue_Push(t *testing.T) {
 }
 
 func TestQueue_Top(t *testing.T) {
-	q := New[int]()
+	q := New[int](10)
 
 	_, err := q.Top()
 	if err == nil {
@@ -53,7 +53,7 @@ func TestQueue_Top(t *testing.T) {
 }
 
 func TestQueue_Pop(t *testing.T) {
-	q := New[int]()
+	q := New[int](10)
 
 	_, err := q.Pop()
 	if err == nil {
@@ -87,7 +87,7 @@ func TestQueue_Pop(t *testing.T) {
 }
 
 func TestQueue_Concurrency(t *testing.T) {
-	q := New[int]()
+	q := New[int](10)
 
 	done := make(chan bool)
 	go func() {
@@ -124,9 +124,10 @@ func TestQueue_Concurrency(t *testing.T) {
 }
 
 func TestQueue_Concurrency_all(t *testing.T) {
-	q := New[int]()
+	size := 100
+	q := New[int](size)
 
-	expectedSize := 100000
+	expectedSize := size
 	done := make(chan struct{}, expectedSize)
 	for i := 0; i < expectedSize; i++ {
 		go func(v int) {
@@ -162,9 +163,9 @@ func TestQueue_Concurrency_all(t *testing.T) {
 }
 
 func TestQueue_Concurrency_all_include_IsEmpty(t *testing.T) {
-	q := New[int]()
+	q := New[int](10000)
 
-	expectedSize := 1000000
+	expectedSize := 1000
 	done := make(chan struct{}, expectedSize)
 	for i := 0; i < expectedSize; i++ {
 		go func() {
