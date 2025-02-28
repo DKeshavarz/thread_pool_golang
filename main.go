@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"thread_pool/config"
-	"thread_pool/navidPool"
-	"thread_pool/workerPool"
+	"thread_pool/threadPool/navidPool"
+	"thread_pool/threadPool/workerPool"
 )
 
 var (
