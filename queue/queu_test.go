@@ -99,7 +99,6 @@ func TestQueue_Concurrency(t *testing.T) {
 		done <- true
 	}()
 
-
 	<-done
 	<-done
 
@@ -127,26 +126,24 @@ func TestQueue_Concurrency(t *testing.T) {
 func TestQueue_Concurrency_all(t *testing.T) {
 	q := New[int]()
 
-	expectedSize := 500 
-	done := make(chan struct{},expectedSize)
-	for i := 0 ; i < expectedSize ; i++ {
-		go func ()  {
-			q.Push(i)
+	expectedSize := 100000
+	done := make(chan struct{}, expectedSize)
+	for i := 0; i < expectedSize; i++ {
+		go func(v int) {
+			q.Push(v)
 			done <- struct{}{}
-		}()
+		}(i)
 	}
 
-	for i := 0 ; i < expectedSize ; i++ {
-		<- done 
+	for i := 0; i < expectedSize; i++ {
+		<-done
 	}
-
-
 
 	if len(q.item) != expectedSize {
 		t.Errorf("Expected queue length to be %d after concurrent pushes, got %d", expectedSize, len(q.item))
 	}
 
-	for i := 0 ; i < expectedSize ; i++ {
+	for i := 0; i < expectedSize; i++ {
 		go func() {
 			_, _ = q.Pop()
 			done <- struct{}{}
@@ -155,10 +152,57 @@ func TestQueue_Concurrency_all(t *testing.T) {
 			_, _ = q.Top()
 		}()
 	}
-	for i := 0 ; i < expectedSize ; i++ {
-		<- done 
+	for i := 0; i < expectedSize; i++ {
+		<-done
 	}
 
+	if !q.IsEmpty() {
+		t.Errorf("Expected queue length to be %d after concurrent pushes, got %d", 0, len(q.item))
+	}
+}
+
+func TestQueue_Concurrency_all_include_IsEmpty(t *testing.T) {
+	q := New[int]()
+
+	expectedSize := 1000000
+	done := make(chan struct{}, expectedSize)
+	for i := 0; i < expectedSize; i++ {
+		go func() {
+			q.Push(i)
+			done <- struct{}{}
+		}()
+	}
+
+	for i := 0; i < expectedSize; i++ {
+		<-done
+	}
+
+	if len(q.item) != expectedSize {
+		t.Errorf("Expected queue length to be %d after concurrent pushes, got %d", expectedSize, len(q.item))
+	}
+
+	for i := 0; i < expectedSize; i++ {
+		go func() {
+			_, _ = q.Pop()
+			done <- struct{}{}
+		}()
+		go func() {
+			_, _ = q.Top()
+		}()
+	}
+	for i := 0; i < expectedSize; i++ {
+		<-done
+	}
+
+	for i := 0; i < expectedSize; i++ {
+		go func() {
+			q.IsEmpty()
+			done <- struct{}{}
+		}()
+	}
+	for i := 0; i < expectedSize; i++ {
+		<-done
+	}
 	if !q.IsEmpty() {
 		t.Errorf("Expected queue length to be %d after concurrent pushes, got %d", 0, len(q.item))
 	}
