@@ -12,7 +12,7 @@ import (
 )
 
 func RunManger(workerCnt int, fileName string){
-	queue := queue.New[int]()
+	queue := queue.New[int](100)
 	done := make(chan struct{})
 	go fileReader(queue, fileName,done)
 	
