@@ -13,8 +13,5 @@ func (m *chanMutex) Lock() {
 }
 
 func (m *chanMutex) Unlock() {
-	select {
-	case <-m.ch:
-	default:	
-	}
+	<-m.ch
 }
