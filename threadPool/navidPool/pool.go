@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"sync"
 	"thread_pool/queue"
 	"time"
 )
@@ -14,16 +13,16 @@ import (
 func RunManger(workerCnt int, fileName string, queueSize int){
 	queue := queue.New[int](queueSize)
 	done := make(chan struct{})
+	finish := make(chan struct{}, workerCnt)
+
 	go fileReader(queue, fileName, done)
-	
-	var wg sync.WaitGroup
 	for i := 1 ; i <= workerCnt ; i++ {
-		wg.Add(1)
-		go worker(queue, done, i, &wg)
+		go worker(queue, done, i, finish)
 	}
 
-	wg.Wait()
-
+	for i := 0; i < workerCnt; i++ {
+		<-finish
+	}
 }
 
 func fileReader(queue *queue.Queue[int], fileName string,done chan struct{}){
@@ -55,8 +54,10 @@ func heavyCalculation(n int){
 	time.Sleep(time.Second * (time.Duration(n)))
 }
 
-func worker(queue *queue.Queue[int], done <-chan struct{}, id int,wg *sync.WaitGroup){
-	defer wg.Done()
+func worker(queue *queue.Queue[int], done <-chan struct{}, id int, finish chan <- struct{}){
+	defer func() {
+		finish <- struct{}{}
+	}()
 
 	for {
 		for !queue.IsEmpty(){
