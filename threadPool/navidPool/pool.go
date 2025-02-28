@@ -28,12 +28,12 @@ func RunManger(workerCnt int, fileName string){
 
 func fileReader(queue *queue.Queue[int], fileName string,done chan struct{}){
 	data,err := os.Open(fileName)
-	defer data.Close()
-
 	if err != nil{
 		fmt.Println(err)
 		return
 	}
+	defer data.Close()
+
 
 	scanner := bufio.NewScanner(data)
 	for scanner.Scan() {
