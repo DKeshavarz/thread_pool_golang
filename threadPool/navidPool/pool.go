@@ -106,17 +106,4 @@ func worker(q *queue.Queue[Task], done <-chan struct{}, workerDone chan<- struct
 			processTask(task, id)
 		}
 	}
-
-	// for {
-	// 	for !q.IsEmpty() {
-	// 		task, _ := q.Pop()
-	// 		processTask(task, id)
-	// 	}
-	// 	select {
-	// 	case <-done:
-	// 		return
-	// 	default:
-	// 		break
-	// 	}
-	// }
 }
