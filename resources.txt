@@ -19,10 +19,3 @@ https://rksurwase.medium.com/efficient-concurrency-in-go-a-deep-dive-into-the-wo
 file handeling
 https://cihanozhan.medium.com/file-operations-in-golang-292825c9fb3d
 
-
-slice in golang ?
-prompt engineering ?
-telegram git bot ?
-mark down ???
-
-file:///home/danny/Downloads/Telegram%20Desktop/proj.pdf
