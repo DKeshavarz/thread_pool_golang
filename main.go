@@ -5,6 +5,7 @@ import (
 
 	"thread_pool/config"
 	"thread_pool/threadPool/navidPool"
+	"thread_pool/threadPool/workerPool"
 )
 
 var (
@@ -26,4 +27,5 @@ func main() {
 	fmt.Println("**********************************************************")
 	navidPool.RunManger(numberWorker, "jobs.txt", maxQueueSize)
 	fmt.Println("**********************************************************")
+	workerPool.RunManger(numberWorker, "jobs.txt")
 }

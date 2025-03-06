@@ -76,12 +76,12 @@ func fileReader(q *queue.Queue[Task], fileName string, done chan struct{}) {
 }
 
 func processTask(task Task, workerID int) {
-	log.Printf(" Worker %d:\t Started task %d  \t->\t (arrived at %ds)",
+	log.Printf(" Worker %-3d:\t Started task   %-3d  \t->\t (arrived at %-3ds)",
 		workerID, task.ID, task.ArrivalTime)
 
 	time.Sleep(time.Duration(task.BurstTime) * time.Second)
 
-	log.Printf(" Worker %d:\t Finished task %d  \t->\t (burst %ds)",
+	log.Printf(" Worker %-3d:\t Finished task  %-3d  \t->\t (burst %-3ds)",
 		workerID, task.ID, task.BurstTime)
 }
 

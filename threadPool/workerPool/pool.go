@@ -6,9 +6,9 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
-
 )
 
 func RunManger(workerCnt int, fileName string){
@@ -29,24 +29,38 @@ func fileReader(jobs chan <- int, fileName string){
 	defer close(jobs)
 
 	data,err := os.Open(fileName)
-	defer data.Close()
-
 	if err != nil{
 		fmt.Println(err)
 		return
 	}
+	defer data.Close()
+	
 
+	idCounter := 1
+	currTime := 0
 	scanner := bufio.NewScanner(data)
 	for scanner.Scan() {
 		line := scanner.Text()
-		num, err := strconv.Atoi(line)
+		parts := strings.Split(line, " ")
+		if len(parts) != 2 {
+			continue
+		}
 
+		arrival, err := strconv.Atoi(parts[0])
+		if err != nil{
+			fmt.Println(err)
+			return
+		}
+		burst, err := strconv.Atoi(parts[1])
 		if err != nil{
 			fmt.Println(err)
 			return
 		}
 		
-		jobs <- num
+		time.Sleep((time.Duration(arrival - currTime)) * time.Second)
+		currTime = arrival
+		jobs <- burst
+		idCounter++
 	}
 
 	
@@ -60,8 +74,8 @@ func worker(id int, jobs <-chan int,wg *sync.WaitGroup){
 	defer wg.Done()
 
 	for val := range jobs {
-		log.Printf("  _  ID = %-6d   Start with input -> %-6d \n", id , val)
+		log.Printf(" Worker = %-3d   Start with input -> %-6d \n", id , val)
 		heavyCalculation(val)
-		log.Printf("  _  ID = %-6d   End   with input -> %-6d \n", id , val)
+		log.Printf("  _  ID = %-3d   End   with input -> %-6d \n", id , val)
 	}
 }
