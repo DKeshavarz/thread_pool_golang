@@ -6,10 +6,10 @@ import (
 	"os"
 )
 
-func GenerateFile(arrivalTimeRange []int, exeTimeRange []int, numberOfLines int, outputFile string) error {
+func GenerateFile(arrivalTimeRange []int, exeTimeRange []int, numberOfLines int, outputFile string) (totalTime int,err error) {
     file, err := os.Create(outputFile)
     if err != nil {
-        return fmt.Errorf("could not create file: %v", err)
+        return 0,fmt.Errorf("could not create file: %v", err)
     }
     defer file.Close() 
 
@@ -17,12 +17,11 @@ func GenerateFile(arrivalTimeRange []int, exeTimeRange []int, numberOfLines int,
         arrivalTime := rand.Intn(arrivalTimeRange[1]-arrivalTimeRange[0]+1) + arrivalTimeRange[0]
         exeTime     := rand.Intn(exeTimeRange[1]-exeTimeRange[0]+1) + exeTimeRange[0]
         line := fmt.Sprintf("%d %d\n", arrivalTime, exeTime)
-
+		totalTime += exeTime
         _, err := file.WriteString(line)
         if err != nil {
-            return fmt.Errorf("could not write to file: %v", err)
+            return 0,fmt.Errorf("could not write to file: %v", err)
         }
     }
-
-    return nil
+    return
 }

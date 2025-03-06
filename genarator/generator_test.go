@@ -14,7 +14,7 @@ func TestGenerateFile(t *testing.T) {
     numberOfLines := 10
     outputFile := "out_test.txt" 
 
-    err := GenerateFile(arrivalTimeRange, exeTimeRange, numberOfLines, outputFile)
+    _, err := GenerateFile(arrivalTimeRange, exeTimeRange, numberOfLines, outputFile)
     if err != nil {
         t.Fatalf("failed to generate file: %v", err)
     }
