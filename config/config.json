@@ -1,5 +1,5 @@
 {
-    "num_worker": 10,
+    "num_worker": 100,
     "queue_size": 10,
     "file_int" : "in.txt",
     "file_out" : "out.txt"
