@@ -6,8 +6,10 @@ import (
 )
 
 type Config struct {
-	NumWorker     int `json:"num_worker"`
-	MaxQueueSize  int `json:"queue_size"`
+	NumWorker    int    `json:"num_worker"`
+	MaxQueueSize int    `json:"queue_size"`
+	InFile       string `json:"file_int"`
+	OutFile      string `json:"file_out"`
 }
 
 func LoadConfig(filename string) (Config, error) {
