@@ -11,8 +11,15 @@ import (
 	"time"
 )
 
+var (
+	Thread_used []bool
+)
+
 func RunManger(workerCnt int, fileName string){
+	now := time.Now()
+
 	jobs   := make(chan int)
+	Thread_used = make([]bool, workerCnt+1)
 
 	var wg sync.WaitGroup
 	for i := 1 ; i <= workerCnt ; i++ {
@@ -23,6 +30,14 @@ func RunManger(workerCnt int, fileName string){
 	go fileReader(jobs,fileName)
 
 	wg.Wait()
+	cnt := 0;
+	for _,val := range Thread_used {
+		if val {
+			cnt++
+		}
+	}
+
+	fmt.Println("totoal exe is : ", time.Since(now), "   and  used ", cnt)
 }
 
 func fileReader(jobs chan <- int, fileName string){
@@ -74,6 +89,7 @@ func worker(id int, jobs <-chan int,wg *sync.WaitGroup){
 	defer wg.Done()
 
 	for val := range jobs {
+		Thread_used[id] = true
 		log.Printf(" Worker = %-3d   Start with input -> %-6d \n", id , val)
 		heavyCalculation(val)
 		log.Printf("  _  ID = %-3d   End   with input -> %-6d \n", id , val)
