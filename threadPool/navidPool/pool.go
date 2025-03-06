@@ -2,6 +2,7 @@ package navidPool
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"sort"
@@ -17,7 +18,14 @@ type Task struct {
 	ArrivalTime int
 }
 
+var (
+	Thread_used []bool
+)
+
 func RunManger(workerCnt int, fileName string, queueSize int) {
+	now := time.Now()
+	Thread_used = make([]bool, workerCnt+1)
+
 	queue := queue.New[Task](queueSize)
 	done := make(chan struct{})
 	finish := make(chan struct{}, workerCnt)
@@ -30,6 +38,14 @@ func RunManger(workerCnt int, fileName string, queueSize int) {
 	for range workerCnt {
 		<-finish
 	}
+
+	cnt := 0;
+	for _,val := range Thread_used {
+		if val {
+			cnt++
+		}
+	}
+	fmt.Println("totoal exe is : ", time.Since(now), "   and  used ", cnt)
 }
 
 func fileReader(q *queue.Queue[Task], fileName string, done chan struct{}) {
@@ -76,6 +92,7 @@ func fileReader(q *queue.Queue[Task], fileName string, done chan struct{}) {
 }
 
 func processTask(task Task, workerID int) {
+	Thread_used[workerID] = true
 	log.Printf(" Worker %-3d:\t Started task   %-3d  \t->\t (arrived at %-3ds)",
 		workerID, task.ID, task.ArrivalTime)
 

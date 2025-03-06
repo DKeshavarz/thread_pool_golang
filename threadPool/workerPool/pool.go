@@ -92,6 +92,6 @@ func worker(id int, jobs <-chan int,wg *sync.WaitGroup){
 		Thread_used[id] = true
 		log.Printf(" Worker = %-3d   Start with input -> %-6d \n", id , val)
 		heavyCalculation(val)
-		log.Printf("  _  ID = %-3d   End   with input -> %-6d \n", id , val)
+		log.Printf(" Worker = %-3d   End   with input -> %-6d \n", id , val)
 	}
 }
