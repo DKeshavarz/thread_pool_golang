@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"thread_pool/config"
 	"thread_pool/threadPool/navidPool"
@@ -11,6 +12,7 @@ import (
 var (
 	numberWorker int
 	maxQueueSize int
+	InFile       string
 )
 
 func init() {
@@ -21,11 +23,23 @@ func init() {
 
 	numberWorker = c.NumWorker
 	maxQueueSize = c.MaxQueueSize
+	InFile = c.InFile
+
+	if c.OutFile != "" {
+
+		file, err := os.Create(c.OutFile)
+		if err != nil {
+			panic(err)
+		}
+		defer file.Close()
+
+		os.Stdout = file
+	}
 }
 
 func main() {
 	fmt.Println("**********************************************************")
-	navidPool.RunManger(numberWorker, "jobs.txt", maxQueueSize)
+	navidPool.RunManger(numberWorker, InFile, maxQueueSize)
 	fmt.Println("**********************************************************")
-	workerPool.RunManger(numberWorker, "jobs.txt")
+	workerPool.RunManger(numberWorker, InFile)
 }
